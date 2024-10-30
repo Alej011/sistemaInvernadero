@@ -1,0 +1,45 @@
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "3001:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: desarrolloweb
+      POSTGRES_USER: alejo
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://alejo:1234@db:5432/desarrolloweb
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"  # Habilitar polling para nodemon
+    volumes:
+      - ./backend:/usr/src/app  # Monta el código local
+      - /usr/src/app/node_modules  # Asegura que los node_modules se manejen dentro del contenedor
+    depends_on:
+      - db
+    entrypoint: ["./wait-for-it.sh", "db:5432", "--"] # El script wait-for-it.sh simplemente "espera" hasta que la base de datos esté completamente iniciada y luego lanza tu aplicación. 
+    # con el script wait-for-it.sh resolvi el problema de generar la base de datos y tablas en automatico.
+    # tambien hay que modificar package.json agregando  "start": "node index.js"
+    command: ["npm", "start"]  # Utiliza npm start para iniciar nodemon
+
+volumes:
+  postgres_data:
+

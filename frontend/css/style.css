@@ -1,0 +1,227 @@
+:root {
+  --blanco: #ffffff;
+  --oscuro: #212121;
+  --primario: #ffc107;
+  --secundario: #0097a7;
+  --gris: #757575;
+  --verde: #00b341;
+  --grisClaro: #dfe9f3;
+
+  --fuentePrincipal: "Paytone One";
+  --fuenteSecundario: "sans-serif";
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; /* 1 rem = 10px */
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0%;
+  font-family: var(--fuentePrincipal);
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  background-color: var(--blanco);
+}
+
+main{
+  margin-bottom: 5rem;
+}
+/* tipografia */
+
+h1 {
+  text-align: center;
+}
+
+/*seccion header*/
+header {
+  display: flex;
+  flex-direction: initial;
+  justify-content: center;
+  align-items: center;
+  color: var(--blanco);
+  width: 100%;
+  background-color: var(--secundario);
+  margin: 0%;
+  box-sizing: border-box;
+  padding: 1rem;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); 
+}
+
+.boton {
+  background-color: var(--secundario);
+  color: var(--blanco);
+  padding: 1rem;
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  width: 50%;
+  text-align: center;
+  border: none;
+  margin-bottom: 1rem;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); 
+  transition: transform .1s ease-in-out;
+  &:hover,
+  &.active {
+    background-color: var(--verde);
+    transform: scale(1.1);
+  }
+}
+
+@media (min-width: 768px) {
+  .boton {
+    width: auto;
+  }
+}
+
+.boton:hover {
+  cursor: pointer;
+}
+
+.Control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Control h3 {
+  color: var(--secundario);
+  font-weight: normal;
+}
+
+.Control p {
+  line-height: 2;
+  text-align: center;
+}
+
+.Control .iconos {
+  height: 10rem;
+  width: 10rem;
+  background-color: var(--verde);
+  border-radius: 50%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+svg path {
+  color: var(--blanco);
+}
+
+@media (min-width: 768px) {
+  .Control-servicios {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 1rem; /*separacion de margin con css grid */
+  }
+}
+
+.gauge-container {
+  margin-top: 30px;
+  text-align: center;
+}
+
+/*estilo de sensor de tierra capacitivo */
+
+.box {
+  position: relative;
+  height: 225px;
+  width: 225px;
+  margin: 0% auto;
+  background: #979ca7;
+  border-radius: 100%;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.box .percent-aqua {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blanco);
+  font-size: 3.5rem;
+  font-family: var(--fuentePrincipal);
+}
+.box .water {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  transform: translate(0, 100%);
+  background: #2c82d0;
+  transition: all 0.3s;
+}
+.box .water_wave {
+  width: 200%;
+  position: absolute;
+  bottom: 100%;
+}
+.box .water_wave_back {
+  right: 0;
+  fill: #c7eeff;
+  -webkit-animation: wave-back 1.4s infinite linear;
+  animation: wave-back 1.4s infinite linear;
+}
+.box .water_wave_front {
+  left: 0;
+  fill: #2c82d0;
+  margin-bottom: -1px;
+  -webkit-animation: wave-front 0.7s infinite linear;
+  animation: wave-front 0.7s infinite linear;
+}
+
+@-webkit-keyframes wave-front {
+  100% {
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes wave-front {
+  100% {
+    transform: translate(-50%, 0);
+  }
+}
+@-webkit-keyframes wave-back {
+  100% {
+    transform: translate(50%, 0);
+  }
+}
+@keyframes wave-back {
+  100% {
+    transform: translate(50%, 0);
+  }
+}
+
+.bottom-text{
+  margin-bottom: 1rem;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+/*footer*/
+
+footer {
+  width: 100%;
+  padding: 1rem;
+  text-align: center;
+  background-color: var(--secundario);
+  font-size: 1rem;
+  color: var(--blanco);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); 
+  font-family: sans-serif;
+}
