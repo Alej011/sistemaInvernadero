@@ -196,7 +196,7 @@ app.post("/login",
         { expiresIn: '2h' } // el token dura dos horas
       );
 
-      return res.status(200).json({ token, message: "Token generado", redirect: '/panel'});
+      return res.status(200).json({ token, message: "Token generado", redirect: '/panel.html'});
 
     } catch (err) {
       console.error("Error al intentar iniciar sesión:", err);
@@ -264,34 +264,42 @@ app.post("/submit", validarToken, validarAdministrador,
   }
 );
 
-
 const crearTablas = async () => {
-  console.log("Intentando verificar si la tabla 'usuarios' existe...");
-
   try {
-    // Verifica si la tabla 'usuarios' ya existe
-    const existe = await knex.schema.hasTable('usuarios');
-    console.log("¿La tabla existe?:", existe);
-  
-    if (!existe) {
-      console.log('Creando tabla "usuarios" en la base de datos');
-    
-      // Crea la tabla 'usuarios'
-      await knex.schema.createTable('usuarios', (table) => {
-        table.increments('id').primary();
-        table.string('usuario').notNullable();
-        table.string('password').notNullable();
-      });
+      // Verificar y crear tabla 'roles'
+      const rolesExiste = await knex.schema.hasTable('roles');
+      if (!rolesExiste) {
+          console.log('Creando tabla "roles" en la base de datos');
+          await knex.schema.createTable('roles', (table) => {
+              table.increments('id').primary();
+              table.string('nombre').notNullable();
+              // Puedes agregar otras columnas para roles aquí (ej: descripcion)
+          });
+          console.log('Tabla "roles" creada exitosamente');
+      } else {
+          console.log('La tabla "roles" ya existe');
+      }
 
-      console.log('Tabla "usuarios" creada exitosamente');
-    } else {
-      console.log('La tabla "usuarios" ya existe');
-    }
+      // Verificar y crear tabla 'usuarios'
+      const usuariosExiste = await knex.schema.hasTable('usuarios');
+      if (!usuariosExiste) {
+          console.log('Creando tabla "usuarios" en la base de datos');
+          await knex.schema.createTable('usuarios', (table) => {
+              table.increments('id').primary();
+              table.string('usuario').notNullable().unique(); // 'unique()' asegura que no haya usuarios duplicados
+              table.string('password').notNullable();
+              table.integer('rol_id').unsigned().references('roles.id'); // Clave foránea a 'roles'
+              // Puedes agregar otras columnas para usuarios aquí (ej: email, nombre_completo)
+          });
+          console.log('Tabla "usuarios" creada exitosamente');
+      } else {
+          console.log('La tabla "usuarios" ya existe');
+      }
+
   } catch (err) {
-    console.error('Error al crear la tabla:', err); // Captura cualquier error durante la creación
+      console.error('Error al crear las tablas:', err);
   }
 };
-
 // Llama a la función crear tabla cuando el servidor se inicie
 app.listen(port, async () => {
   console.log('Servidor iniciando...');

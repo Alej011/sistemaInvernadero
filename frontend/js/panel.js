@@ -1,5 +1,5 @@
 
-const esp32Ip = "http://192.168.192.218";  // ip que nos genera el servidor ESP32
+const esp32Ip = "http://192.168.28.192";  // ip que nos genera el servidor ESP32
 
 // temperatura ambiente
  // Create Temperature Gauge
@@ -8,7 +8,7 @@ const esp32Ip = "http://192.168.192.218";  // ip que nos genera el servidor ESP3
     value: 14,          // Initial value for the gauge
     min: 0,
     max: 70,
-    symbol: "°C",
+    symbol: "°C", 
     pointer: true,      // Show pointer
     gaugeWidthScale: 0.6,
     pointerOptions: {
@@ -170,7 +170,7 @@ function obtenerDatosSensorGas() {
   fetch(`${esp32Ip}/leer/gas`)
     .then(response => response.json())
     .then(data => {
-      console.log("Gas: ", data);
+      console.log("Gas: ", data)
       sensorGasGauge.refresh(data.porcentajeGas);
       msg.innerText = data.status;
     })
@@ -231,4 +231,28 @@ document.getElementById('closeDoor').addEventListener('click', function() {
     .then(response => response.text())
     .then(data => console.log(data))
     .catch(error => console.error('Error:', error));
+});
+
+// Función para activar IA
+document.getElementById('activarIA').addEventListener('click', function () {
+    console.log("Intentando activar IA..."); // Mensaje de prueba
+    fetch(`${esp32Ip}/modoIA?estado=on`)
+        .then(response => response.text())
+        .then(data => {
+            console.log("Respuesta del servidor:", data); // Verificar si llega la respuesta del ESP32
+            alert("Modo Automático Activado"); 
+        })
+        .catch(error => console.error('Error al activar la IA:', error));
+});
+
+// Función para desactivar IA (Modo Manual)
+document.getElementById('desactivarIA').addEventListener('click', function () {
+    console.log("Intentando desactivar IA..."); // Mensaje de prueba
+    fetch(`${esp32Ip}/modoIA?estado=off`)
+        .then(response => response.text())
+        .then(data => {
+            console.log("Respuesta del servidor:", data);
+            alert("Modo Manual Activado"); 
+        })
+        .catch(error => console.error('Error al desactivar la IA:', error));
 });
